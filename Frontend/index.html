@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+      
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
+    
+</head>
+<body>
+    
+    <h1>CryptoJs AES Encryption/Decryption</h1>
+    <div>
+        <input id="content-input" placeholder="Enter Name"/>
+        <button id="submit-btn" onclick="handleSubmit()"> Submit </button>
+    </div>
+    <div id="encrypted"></div>
+    <div id="decrypted"></div>
+
+    <script src="doit.js"></script>
+    <script>
+        function handleSubmit(){
+            var inputText = document.getElementById("content-input").value;
+            let data = {data:encrypt(JSON.stringify({name:inputText,class:12}),'1234SA')};
+            console.log(data);
+
+            fetch("http://localhost:1234/auth",{
+                method:'POST',
+                headers:{
+                    client_id:'wkfwiucwebc',
+                    client_secret:'cenuq9h3pvTDvTFVE',
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(data)
+            }).then((response)=>response.json())
+            .then((data)=>{
+                if(data.status === 200){
+                    console.log(data.message);
+                    console.log(decrypt(data.data,'1234SA'))
+                }
+                }
+            )
+               
+            .catch((err)=>alert(err));
+        }
+    </script>
+</body>
+</html>
